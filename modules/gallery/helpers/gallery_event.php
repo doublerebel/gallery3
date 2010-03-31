@@ -334,16 +334,12 @@ class gallery_event_Core {
             ->id("rotate_ccw")
             ->label(t("Rotate 90° counter clockwise"))
             ->css_class("ui-icon-rotate-ccw")
-            ->ajax_handler("function(data) { " .
-                           "\$.gallery_replace_image(data, \$('$thumb_css_selector')) }")
             ->url(url::site("quick/rotate/$item->id/ccw?csrf=$csrf&amp;from_id=$theme_item->id&amp;page_type=$page_type")))
           ->append(
             Menu::factory("ajax_link")
             ->id("rotate_cw")
             ->label(t("Rotate 90° clockwise"))
             ->css_class("ui-icon-rotate-cw")
-            ->ajax_handler("function(data) { " .
-                           "\$.gallery_replace_image(data, \$('$thumb_css_selector')) }")
             ->url(url::site("quick/rotate/$item->id/cw?csrf=$csrf&amp;from_id=$theme_item->id&amp;page_type=$page_type")));
       }
 
@@ -375,7 +371,6 @@ class gallery_event_Core {
                      ->id("make_album_cover")
                      ->label($cover_title)
                      ->css_class("ui-icon-star")
-                     ->ajax_handler("function(data) { window.location.reload() }")
                      ->url(url::site("quick/make_album_cover/$item->id?csrf=$csrf")));
         }
         $options_menu

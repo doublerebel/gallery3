@@ -105,17 +105,6 @@ class Menu_Element_Link extends Menu_Element {
  * Menu element that provides an AJAX link.
  */
 class Menu_Element_Ajax_Link extends Menu_Element {
-  public $ajax_handler;
-
-  /**
-   * Set the AJAX handler
-   * @chainable
-   */
-  public function ajax_handler($ajax_handler) {
-    $this->ajax_handler = $ajax_handler;
-    return $this;
-  }
-
   public function render() {
     $view = new View(isset($this->view) ? $this->view : "menu_ajax_link.html");
     $view->menu = $this;
