@@ -46,7 +46,7 @@
     </style>
       <? endif ?>
     <? endif ?>
-    <?= $theme->script("jquery.js") ?>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
     <?= $theme->script("jquery.form.js") ?>
     <?= $theme->script("jquery-ui.js") ?>
     <?= $theme->script("gallery.common.js") ?>

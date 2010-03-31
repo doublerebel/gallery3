@@ -2,11 +2,10 @@
  * Initialize jQuery UI and Gallery Plugins
  */
 
-$(document).ready(function() {
+$(function() {
 
   // Initialize Superfish menus (hidden, then shown to address IE issue)
-  $("#g-site-menu .g-menu").hide().addClass("sf-menu");
-  $("#g-site-menu .g-menu").superfish({
+  $("#g-site-menu .g-menu").hide().addClass("sf-menu").superfish({
     delay: 500,
     animation: {
       opacity:'show',
@@ -35,9 +34,8 @@ $(document).ready(function() {
   // Apply jQuery UI icon and hover styles to context menus
   if ($(".g-context-menu").length) {
     $(".g-context-menu li").addClass("ui-state-default");
-    $(".g-context-menu a").addClass("g-button ui-icon-left");
-    $(".g-context-menu a").prepend("<span class=\"ui-icon\"></span>");
-    $(".g-context-menu a span").each(function() {
+    $(".g-context-menu a").addClass("g-button ui-icon-left").prepend("<span class=\"ui-icon\"></span>")
+      .find("span").each(function() {
       var iconClass = $(this).parent().attr("class").match(/ui-icon-.[^\s]+/).toString();
       $(this).addClass(iconClass);
     });
@@ -49,44 +47,34 @@ $(document).ready(function() {
     $('.g-item').equal_heights().gallery_valign();
 
     // Initialize thumbnail hover effect
-    $(".g-item").hover(
+    $(".g-item").gallery_context_menu().hover(
       function() {
+        var $this = $(this);
         // Insert a placeholder to hold the item's position in the grid
-        var placeHolder = $(this).clone().attr("id", "g-place-holder");
-        $(this).after($(placeHolder));
+        var $placeHolder = $this.clone().attr("id", "g-place-holder");
+        $this.after($placeHolder);
         // Style and position the hover item
-        var position = $(this).position();
-        $(this).css("top", position.top).css("left", position.left);
-        $(this).addClass("g-hover-item");
-        // Initialize the contextual menu
-        $(this).gallery_context_menu();
+        var position = $this.position();
+        $this.css({ top: position.top, left: position.left });
+        $this.addClass("g-hover-item");
         // Set the hover item's height
-        $(this).height("auto");
-        var context_menu = $(this).find(".g-context-menu");
-        var adj_height = $(this).height() + context_menu.height();
-        if ($(this).next().height() > $(this).height()) {
-          $(this).height($(this).next().height());
-        } else if ($(this).prev().height() > $(this).height()) {
-          $(this).height($(this).prev().height());
-        } else {
-          $(this).height(adj_height);
-        }
+        var $thisHeight = $this.height("auto").height();
+        var context_menu = $this.find(".g-context-menu");
+        var adj_height = $thisHeight + context_menu.height(), newHeight;
+        $this.height( (newHeight = $this.next().height() > $thisHeight) ?
+          newHeight :
+          (newHeight = $this.prev().height() > $thisHeight) ?
+            newHeight : adj_height);
       },
       function() {
+        var $this = $(this);
         // Reset item height and position
-        if ($(this).next().height()) {
-          var sib_height = $(this).next().height();
-        } else {
-          var sib_height = $(this).prev().height();
-        }
-        if ($.browser.msie && $.browser.version >= 8) {
-          sib_height = sib_height + 1;
-        }
-        $(this).css("height", sib_height);
-        $(this).css("position", "relative");
-        $(this).css("top", 0).css("left", 0);
+        sib_height = $this.next().height() || $this.prev().height();
+        if ($.browser.msie && $.browser.version >= 8) sib_height++;
+       
         // Remove the placeholder and hover class from the item
-        $(this).removeClass("g-hover-item");
+        $this.css({ height: sib_height, position: "relative", top: 0, left: 0})
+          .removeClass("g-hover-item");
         $("#g-place-holder").remove();
       }
     );
@@ -98,9 +86,7 @@ $(document).ready(function() {
     $("#g-photo,#g-movie").gallery_fit_photo();
 
     // Initialize context menus
-    $("#g-photo,#g-movie").hover(function(){
-      $(this).gallery_context_menu();
-    });
+    $("#g-photo,#g-movie").gallery_context_menu();
 
     // Add scroll effect for links to named anchors
     $.localScroll({
